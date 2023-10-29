@@ -1,0 +1,26 @@
+@mixin btn {
+    padding: 17px 27px 17px;
+    font-size: 14px;
+    display: inline-block;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.4s ease;
+    font-weight: 900;
+    line-height: 1.15em;
+    border-radius: 27px;
+    font-size: 13px;
+    padding: 14px 27px 14px;
+    border: none;
+
+    a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: #ffffff;
+        background: $second-color-hover;
+        text-decoration: none;
+    }
+}
