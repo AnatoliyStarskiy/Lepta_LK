@@ -1,13 +1,13 @@
 .header {
-    position: absolute;
     width: 100%;
     z-index: 99;
     transition: all 0.3s ease-in-out;
 
+
     &__wrapper {
         padding: 10px 0;
         display: flex;
-        justify-content: space-between;
+        justify-content: start;
         align-items: center;
         margin-bottom: 10px;
     }
@@ -16,6 +16,10 @@
         margin-top: 15px;
         @include btn;
         background: $second-color;
+    }
+
+    .logo {
+        margin-right: 30px;
     }
 }
 

@@ -1,82 +1,148 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Предполагается, что данные о пользователе, баллах и специальных предложениях доступны через объект user
 
-  document.getElementById("login-email").addEventListener("click", showEmailForm);
-  document.getElementById("login-phone").addEventListener("click", showPhoneForm);
-  document.getElementById("send-sms-code").addEventListener("click", sendSMSCode);
+  const emailForm = document.querySelector("#email-form");
+  const phoneForm = document.querySelector("#phone-form");
+  const smsCodeForm = document.querySelector("#sms-code-form");
+  const loginEmail = document.querySelector("#login-email");
+  const loginPhone = document.querySelector("#login-phone");
+  const sendSmsCode = document.querySelector("#send-sms-code");
 
-  function showEmailForm() {
-    document.getElementById("email-form").style.display = "flex";
-    document.getElementById("phone-form").style.display = "none";
-    document.getElementById("sms-code-form").style.display = "none";
+  if (loginEmail) {
+    loginEmail.addEventListener("click", () => showForm(emailForm, [phoneForm, smsCodeForm]));
+  }
+  if (loginPhone) {
+    loginPhone.addEventListener("click", () => showForm(phoneForm, [emailForm, smsCodeForm]));
+  }
+  if (sendSmsCode) {
+    sendSmsCode.addEventListener("click", () => showForm(smsCodeForm, [phoneForm, emailForm]));
   }
 
-  function showPhoneForm() {
-    document.getElementById("email-form").style.display = "none";
-    document.getElementById("phone-form").style.display = "flex";
-    document.getElementById("sms-code-form").style.display = "none";
-    // Применить маску к номеру телефона
-    $('#phone').inputmask("+7 (999) 999-99-99");
+  function showForm(formToShow, formsToHide) {
+    formsToHide.forEach(form => {
+      form.style.display = "none";
+      $('#phone').inputmask("+7 (999) 999-99-99");
+    });
+
+    formToShow.style.display = "flex";
+
   }
 
-  function sendSMSCode() {
-    // Здесь можно добавить код для отправки SMS-кода на введенный номер телефона
-    // После отправки SMS кода можно переключиться на форму ввода кода.
-    document.getElementById("sms-code-form").style.display = "flex";
-    document.getElementById("phone-form").style.display = "none";
-  }
+  const editableInputs = document.querySelectorAll(".editable");
+  const editButton = document.querySelector("#profile-info__edit");
+  const saveButton = document.querySelector("#profile-info__save");
 
-  // Заполняем данные о пользователе
-  document.getElementById("profile-name").textContent = user.name;
-  document.getElementById("profile-birthdate").textContent = user.birthdate;
-  document.getElementById("profile-phone").textContent = user.phone;
-  document.getElementById("profile-email").textContent = user.email;
-
-  // Обработчик формы редактирования
-  document.getElementById("edit-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    // Собираем измененные данные
-    const editedName = document.getElementById("edit-name").value;
-    const editedBirthdate = document.getElementById("edit-birthdate").value;
-    const editedPhone = document.getElementById("edit-phone").value;
-    const editedEmail = document.getElementById("edit-email").value;
-
-    // Обновляем данные о пользователе
-    user.name = editedName;
-    user.birthdate = editedBirthdate;
-    user.phone = editedPhone;
-    user.email = editedEmail;
-
-    // Обновляем отображение данных
-    document.getElementById("profile-name").textContent = editedName;
-    document.getElementById("profile-birthdate").textContent = editedBirthdate;
-    document.getElementById("profile-phone").textContent = editedPhone;
-    document.getElementById("profile-email").textContent = editedEmail;
-
-    // Здесь вы можете также отправить измененные данные на сервер
+  editableInputs.forEach(input => {
+    input.addEventListener("click", function () {
+      if (editButton.classList.contains("editing")) {
+        input.removeAttribute("disabled");
+        input.focus();
+      }
+    });
   });
 
-  // Заполняем данные о баллах
-  document.getElementById("available-points").textContent = user.availablePoints;
-
-  // Заполняем данные о специальных предложениях
-  const specialOffers = user.specialOffers;
-  const specialOffersList = document.querySelector("#profile-rewards ul");
-  specialOffersList.innerHTML = ""; // Очищаем список
-  specialOffers.forEach((offer) => {
-    const li = document.createElement("li");
-    li.textContent = offer;
-    specialOffersList.appendChild(li);
+  editButton.addEventListener("click", function () {
+    if (editButton.classList.contains("editing")) {
+      editableInputs.forEach(input => {
+        input.setAttribute("disabled", true);
+      });
+      saveButton.style.display = "none";
+      editButton.textContent = "Редактировать";
+      editButton.classList.remove("editing");
+    } else {
+      editableInputs.forEach(input => {
+        input.removeAttribute("disabled");
+      });
+      saveButton.style.display = "inline-block";
+      editButton.style.display = "none";
+      editButton.classList.add("editing");
+    }
   });
 
-  const btnEditProfile = querySelector('#profile-info__edit'); а
-  const editProfile = querySelector('#profile-edit');
+  saveButton.addEventListener("click", function () {
+    editableInputs.forEach(input => {
+      input.setAttribute("disabled", true);
+    });
+    saveButton.style.display = "none";
+    editButton.style.display = "inline-block";
+    editButton.classList.remove("editing");
+  });
 
-  btnEditProfile.addEventListener('click', (e) => {
+  // Получаем форму и поля ввода
+  const form = document.getElementById('profile-form');
+  const nameInput = document.getElementById('profile-name');
+  const birthdateInput = document.getElementById('profile-birthdate');
+  const phoneInput = document.getElementById('profile-phone');
+  const emailInput = document.getElementById('profile-email');
+
+  // Получаем элементы для отображения ошибок
+  const phoneError = document.getElementById('phone-error');
+  const emailError = document.getElementById('email-error');
+
+  // Функция для валидации номера телефона
+  function validatePhone() {
+    const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+    if (!phonePattern.test(phoneInput.value)) {
+      phoneError.textContent = 'Пожалуйста, введите номер телефона в формате +7 (999) 999-99-99';
+      phoneInput.classList.add('error');
+      return false;
+    } else {
+      phoneError.textContent = '';
+      phoneInput.classList.remove('error');
+      return true;
+    }
+  }
+
+  // Функция для валидации электронной почты
+  function validateEmail() {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(emailInput.value)) {
+      emailError.textContent = 'Пожалуйста, введите корректный адрес электронной почты в формате example@gmail.com';
+      emailInput.classList.add('error');
+      return false;
+    } else {
+      emailError.textContent = '';
+      emailInput.classList.remove('error');
+      return true;
+    }
+  }
+
+  // Обработчик события при отправке формы
+  form.addEventListener('submit', function (e) {
+    // Предотвращаем отправку формы
     e.preventDefault();
-    console.log('test');
-    editProfile.style.display = "flex";
-  })
+
+    // Вызываем функции валидации
+    const isPhoneValid = validatePhone();
+    const isEmailValid = validateEmail();
+
+    // Если все поля прошли валидацию, можно отправить форму
+    if (isPhoneValid && isEmailValid) {
+      form.submit();
+    }
+  });
+
+  // Обработчик события при нажатии кнопки "Редактировать"
+  document.getElementById('profile-info__edit').addEventListener('click', function () {
+    nameInput.removeAttribute('disabled');
+    birthdateInput.removeAttribute('disabled');
+    phoneInput.removeAttribute('disabled');
+    emailInput.removeAttribute('disabled');
+  });
+
+  // Обработчик события при нажатии кнопки "Сохранить"
+  document.getElementById('profile-info__save').addEventListener('click', function () {
+    // Снова валидируем поля перед сохранением
+    const isPhoneValid = validatePhone();
+    const isEmailValid = validateEmail();
+
+    // Если все поля прошли валидацию, можно сохранить данные
+    if (isPhoneValid && isEmailValid) {
+      nameInput.setAttribute('disabled', true);
+      birthdateInput.setAttribute('disabled', true);
+      phoneInput.setAttribute('disabled', true);
+      emailInput.setAttribute('disabled', true);
+    }
+  });
 
 
 });

@@ -12,6 +12,25 @@
     color: $text-color;
 }
 
+body {
+    position: relative;
+    height: auto;
+    background: url("../images/bg/tolkovo_bg.jpg") center center / cover no-repeat;
+    background-attachment: fixed;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: -1;
+    background-attachment: fixed;
+}
+
 .main {
     scroll-behavior: smooth;
 }
@@ -20,6 +39,8 @@
     max-width: 1400px;
     margin: 0 auto;
 }
+
+
 
 @import 'blocks/title';
 @import 'blocks/header';
