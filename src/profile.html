@@ -121,13 +121,11 @@
                                         <label for="profile-name">ФИО:</label>
                                         <input name="name" type="text" id="profile-name" class="editable" disabled
                                             value="Иван Иванов" required>
-                                        <span class="error-message" id="email-error"></span>
                                     </div>
                                     <div class="profile-info__item">
                                         <label for="profile-birthdate">Дата рождения:</label>
                                         <input name="date" type="date" id="profile-birthdate" class="editable" disabled
                                             required>
-                                        <span class="error-message" id="email-error"></span>
                                     </div>
                                     <div class="profile-info__item">
                                         <label for="profile-phone">Номер телефона:</label>
@@ -135,15 +133,15 @@
                                             value="+7 (999) 999-99-99" required
                                             pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$"
                                             title="Пожалуйста, введите номер телефона в формате +7 (999) 999-99-99">
-                                        <span class="error-message" id="phone-error"></span>
                                     </div>
+                                    <span class="error-message" id="phone-error"></span>
                                     <div class="profile-info__item">
                                         <label for="profile-email">Почта:</label>
                                         <input name="email" name="name" type="email" id="profile-email" class="editable"
                                             disabled value="example@gmail.com" required
                                             title="Пожалуйста, введите корректный адрес электронной почты">
-                                        <span class="error-message" id="email-error"></span>
                                     </div>
+                                    <span class="error-message" id="email-error"></span>
                                     <button class="profile-info__edit" id="profile-info__edit">Редактировать</button>
                                     <button class="profile-info__save" id="profile-info__save">Сохранить</button>
                                 </form>
@@ -170,10 +168,10 @@
                             <h2 class="ref-block__header">Подари другу баллы</h2>
                             <p class="ref-block__text">Рекомендуйте наши магазины друзьям и получайте по 30 баллов за
                                 участника. А друг получит дополнительно 50 баллов на первую покупку.</p>
-                            <input type="text" class="input-line__input" id="clplink"
-                                value="https://tolkovo.com/?_rid=48453&amp;_rh=491210">
-                            <button data-clipboard-target="#clplink" class="profile-ref__bnt ref-block__link"><span
-                                    class="link">Скопировать ссылку</span></button>
+
+                            <div id="qrcode"></div>
+                            <button class="profile-ref__bnt ref-block__link" id="downloadButton">Поделиться
+                                QR-код</button>
                         </div>
                     </div>
                 </div>
@@ -181,10 +179,11 @@
         </section>
     </main>
 
-
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.2.2/html2canvas.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 

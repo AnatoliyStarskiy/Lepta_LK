@@ -37,19 +37,23 @@
 
     .profile-form {
         display: flex;
+        justify-content: space-between;
         flex-direction: column;
         margin-bottom: 20px;
         flex-wrap: wrap;
 
 
         input {
+            display: block;
             font-weight: 700;
             margin-left: 10px;
             padding: 2px;
-            font-size: 18px;
+            font-size: 18px;   
+            text-align: end;         
         }
 
         label {
+            display: block;
             margin-top: 10px;
         }
 
@@ -61,6 +65,11 @@
             border: 1px solid #ff0000;
         }
 
+        .error-message {
+            max-width: 310px;
+            color: #ff0000;
+        }
+
         button {
             margin-top: 20px;
         }
@@ -69,7 +78,11 @@
     .profile-info {
 
         &__item {
-
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
             span {
                 display: block;
                 color: #ff0000;

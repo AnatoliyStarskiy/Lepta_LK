@@ -49,3 +49,22 @@
 
 
 }
+
+
+@media (max-width: 477px) {
+
+    .profile {
+        &__left {
+            width: 477px;
+        }
+
+        .profile-info {
+            &__item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    }
+
+
+}

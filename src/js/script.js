@@ -67,18 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     editButton.classList.remove("editing");
   });
 
-  // Получаем форму и поля ввода
   const form = document.getElementById('profile-form');
   const nameInput = document.getElementById('profile-name');
   const birthdateInput = document.getElementById('profile-birthdate');
   const phoneInput = document.getElementById('profile-phone');
   const emailInput = document.getElementById('profile-email');
-
-  // Получаем элементы для отображения ошибок
   const phoneError = document.getElementById('phone-error');
   const emailError = document.getElementById('email-error');
 
-  // Функция для валидации номера телефона
   function validatePhone() {
     const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
     if (!phonePattern.test(phoneInput.value)) {
@@ -92,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Функция для валидации электронной почты
   function validateEmail() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(emailInput.value)) {
@@ -106,22 +101,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Обработчик события при отправке формы
+
   form.addEventListener('submit', function (e) {
-    // Предотвращаем отправку формы
     e.preventDefault();
 
-    // Вызываем функции валидации
     const isPhoneValid = validatePhone();
     const isEmailValid = validateEmail();
 
-    // Если все поля прошли валидацию, можно отправить форму
     if (isPhoneValid && isEmailValid) {
       form.submit();
     }
   });
 
-  // Обработчик события при нажатии кнопки "Редактировать"
   document.getElementById('profile-info__edit').addEventListener('click', function () {
     nameInput.removeAttribute('disabled');
     birthdateInput.removeAttribute('disabled');
@@ -129,13 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
     emailInput.removeAttribute('disabled');
   });
 
-  // Обработчик события при нажатии кнопки "Сохранить"
   document.getElementById('profile-info__save').addEventListener('click', function () {
-    // Снова валидируем поля перед сохранением
     const isPhoneValid = validatePhone();
     const isEmailValid = validateEmail();
 
-    // Если все поля прошли валидацию, можно сохранить данные
     if (isPhoneValid && isEmailValid) {
       nameInput.setAttribute('disabled', true);
       birthdateInput.setAttribute('disabled', true);
@@ -145,4 +133,52 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
+  function generateQRCode(referralLink) {
+    const qrcode = new QRCode(document.querySelector("#qrcode"), {
+      text: referralLink,
+      width: 128,
+      height: 128
+    });
+  }
+
+  /* generateQRCode('https://tolkovo.com/?_rid=48453&amp;_rh=491210');
+  /* generateQRCode(referralLink); */
+  
+  document.getElementById("downloadButton").addEventListener("click", function() {
+    // Проверьте, создан ли уже QR-код
+    if (!document.querySelector("#qrcode canvas")) {
+        // Если QR-код еще не создан, создайте его
+        var referralLink = "https://tolkovo.com/?_rid=48453&amp;_rh=491210";
+        generateQRCode(referralLink);
+    }
+
+    // Используйте html2canvas для создания изображения QR-кода
+    var qrcodeContainer = document.querySelector("#qrcode");
+    qrcodeContainer.willReadFrequently = true; // Устанавливаем атрибут, как указано в предыдущем ответе
+
+    html2canvas(qrcodeContainer).then(function(canvas) {
+        // Преобразуйте Canvas в Blob
+        canvas.toBlob(function(blob) {
+            // Подготовьте объект для обмена
+            var shareData = {
+                title: "Реферальный QR-код",
+                text: "Поделитесь этим QR-кодом",
+                files: [new File([blob], "qr_code.png", { type: "image/png" })],
+            };
+
+            // Откройте диалоговое окно обмена
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => console.log("QR-код успешно отправлен"))
+                    .catch(error => console.error("Ошибка отправки QR-кода:", error));
+            } else {
+                alert("Ваш браузер не поддерживает функцию обмена.");
+            }
+        });
+    });
 });
+
+
+});
+
+
