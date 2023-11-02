@@ -143,24 +143,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* generateQRCode('https://tolkovo.com/?_rid=48453&amp;_rh=491210');
   /* generateQRCode(referralLink); */
+
+  const downloadButton = document.querySelector("#downloadButton");
   
-  document.getElementById("downloadButton").addEventListener("click", function() {
+  downloadButton.addEventListener("click", function() {
     // Проверьте, создан ли уже QR-код
     if (!document.querySelector("#qrcode canvas")) {
         // Если QR-код еще не создан, создайте его
-        var referralLink = "https://tolkovo.com/?_rid=48453&amp;_rh=491210";
+        let referralLink = "https://tolkovo.com/?_rid=48453&amp;_rh=491210";
         generateQRCode(referralLink);
+        downloadButton.textContent = 'Поделиться QR-код';
     }
 
     // Используйте html2canvas для создания изображения QR-кода
-    var qrcodeContainer = document.querySelector("#qrcode");
+    const qrcodeContainer = document.querySelector("#qrcode");
     qrcodeContainer.willReadFrequently = true; // Устанавливаем атрибут, как указано в предыдущем ответе
 
     html2canvas(qrcodeContainer).then(function(canvas) {
         // Преобразуйте Canvas в Blob
         canvas.toBlob(function(blob) {
             // Подготовьте объект для обмена
-            var shareData = {
+            const shareData = {
                 title: "Реферальный QR-код",
                 text: "Поделитесь этим QR-кодом",
                 files: [new File([blob], "qr_code.png", { type: "image/png" })],
